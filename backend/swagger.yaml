@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: AI Notes Summarizer + Q&A API
+  version: 1.0.0
+  description: Backend API for uploading documents, summarizing content, and Q&A interactions.
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Development Server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Created
+  /auth/login:
+    post:
+      summary: Login user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Success
+  /documents:
+    get:
+      summary: Get all user documents
+      tags: [Documents]
+      responses:
+        '200':
+          description: Success
+    post:
+      summary: Upload a new document
+      tags: [Documents]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+  /documents/{id}:
+    delete:
+      summary: Delete a document
+      tags: [Documents]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /qa/{documentId}:
+    get:
+      summary: Get Q&A chat history for a document
+      tags: [Q&A]
+      parameters:
+        - in: path
+          name: documentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+    post:
+      summary: Ask a question about a document
+      tags: [Q&A]
+      parameters:
+        - in: path
+          name: documentId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                question:
+                  type: string
+      responses:
+        '201':
+          description: Created
+  /analytics:
+    get:
+      summary: Get global app usage analytics
+      tags: [Analytics]
+      security: []
+      responses:
+        '200':
+          description: Success

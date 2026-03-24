@@ -1,0 +1,14 @@
+{
+  "name": "ainotessummarizer",
+  "version": "1.0.0",
+  "description": "Root package to run both frontend and backend concurrently.",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "npm run start --prefix backend",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
